@@ -1,0 +1,42 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="textml; charset=utf-8" />
+<title></title>
+<!--ExtJs框架开始-->
+<link rel="stylesheet" type="text/css"
+	href="./Extjs4.2/resources/css/ext-all.css" />
+<script type="text/javascript" src="./Extjs4.2/ext-all.js"></script>
+<link rel="stylesheet" type="text/css" href="./checkcode.css" />
+
+<!--ExtJs框架结束-->
+<script type="text/javascript">
+
+Ext.onReady(function () {
+    var form = new Ext.form.FormPanel({
+        frame: true,
+        title: '表单标题',
+        style: 'margin:10px',
+        html: '<div style="padding:10px">这里表单内容</div>'
+    });
+    var win = new Ext.Window({
+        title: '窗口',
+        width: 476,
+        height: 374,
+        html: '<div>这里是窗体内容</div>',
+        resizable: true,
+        modal: true,
+        closable: true,
+        maximizable: true,
+        minimizable: true,
+        items: form
+    });
+    win.show();
+});
+	
+</script>
+</head>
+<body>
+aa
+</body>
+</html>

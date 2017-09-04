@@ -1,155 +1,122 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-	<meta http-equiv="Content-Type" content="textml; charset=utf-8" />
-    <title></title>
-    <!--ExtJs框架开始-->
-    <link rel="stylesheet" type="text/css" href="./Extjs4.2/resources/css/ext-all.css" />
-    <script type="text/javascript" src="./Extjs4.2/ext-all.js"></script>
-    <link rel="stylesheet" type="text/css" href="./checkcode.css" />
-    
-    <!--ExtJs框架结束-->
-    <script type="text/javascript"> 
-        //定义验证码控件  
-        Ext.define('CheckCode',{  
-            extend: 'Ext.form.field.Text',   
-            alias: 'widget.checkcode',  
-            inputTyle:'codefield',  
-            codeUrl:Ext.BLANK_IMAGE_URL,  
-            isLoader:true,  
-            onRender:function(ct,position){  
-                this.callParent(arguments);  
-                this.codeEl = ct.createChild({ tag: 'img', src: Ext.BLANK_IMAGE_URL});  
-                this.codeEl.addCls('x-form-code');  
-                this.codeEl.on('click', this.loadCodeImg, this);  
-                  
-                if (this.isLoader) this.loadCodeImg();  
-            },  
-            alignErrorIcon: function() {  
-                this.errorIcon.alignTo(this.codeEl, 'tl-tr', [2, 0]);  
-            },  
-            //如果浏览器发现url不变，就认为图片没有改变，就会使用缓存中的图片，而不是重新向服务器请求，所以需要加一个参数，改变url  
-            loadCodeImg: function() {  
-                this.codeEl.set({ src: this.codeUrl + '?id=' + Math.random() });  
-            }  
-        });  
-          
-          
-        Ext.onReady(  
-                function(){  
-                      
-                     var checkcode = Ext.create('CheckCode',{  
-                            cls : 'key',  
-                            fieldLabel : '验证码',  
-                            name : 'CheckCode',  
-                            id : 'CheckCode',  
-                            allowBlank : false,  
-                            isLoader:true,  
-                            blankText : '验证码不能为空',  
-                            codeUrl: 'getCode',  
-                            width : 150  
-                        });  
-                      
-                    var form = Ext.create(  
-                            'Ext.form.Panel',  
-                            {  
-                                frame:true,  
-                                title:'用户登录',  
-                                width:300,  
-                                height:170,  
-                                //渲染到页面中的loginForm层中  
-                                renderTo:'loginForm',  
-                                //是否可以拖动  
-                                draggable:true,  
-                                //使buttons中的button居中显示  
-                                buttonAlign:'center',  
-                                fieldDefaults:{  
-                                    //居左  
-                                    labelAlign:'center',  
-                                    //宽度  
-                                    labelWidth:50,  
-                                    //anchor: '90%',  
-                                    //错误提示显示在一边(side)，还可以配置为under、title、none  
-                                    msgTarget: 'side'  
-                                },  
-                                items:[  
-                                       {  
-                                           xtype:'textfield',  
-                                           fieldLabel:'用户名',  
-                                           name:'name',  
-                                           //不允许为空  
-                                           allowBlank:false,  
-                                           blankText:'用户名不能为空'  
-                                       },  
-                                       {  
-                                           xtype:'textfield',  
-                                           fieldLabel:'密    码',  
-                                           name:'password',  
-                                           inputType:'password',  
-                                           allowBlank:false,  
-                                           blankText:'密码不能为空'  
-                                       },  
-                                       checkcode  
-                                ],  
-                                buttons:[  
-                                         {  
-                                             text:'登录',  
-                                             width:80,  
-                                             height:30,  
-                                             handler:function(){  
-                                                 //获取当前的表单form  
-                                                 var form = this.up('form').getForm();  
-                                                 //判断否通过了表单验证，如果不能空的为空则不能提交  
-                                                 if(form.isValid()){  
-                                                     //alert("可以提交");  
-                                                     form.submit(  
-                                                             {  
-                                                                 clientValidation:true,  
-                                                                 waitMsg:'请稍候',  
-                                                                 waitTitle:'正在验证登录',  
-                                                                 url:'user_login',  
-                                                                 success:function(form,action){  
-                                                                     //登录成功后的操作，这里只是提示一下  
-                                                                     Ext.MessageBox.show({  
-                                                                         width:150,  
-                                                                         title:"登录成功",  
-                                                                         buttons: Ext.MessageBox.OK,  
-                                                                         msg:action.result.msg  
-                                                                     })  
-                                                                 },  
-                                                                 failure:function(form,action){  
-                                                                     Ext.MessageBox.show({  
-                                                                         width:150,  
-                                                                         title:"登录失败",  
-                                                                         buttons: Ext.MessageBox.OK,  
-                                                                         msg:action.result.msg  
-                                                                     })  
-                                                                 }  
-                                                                      
-                                                             }  
-                                                     )  
-                                                 }  
-                                             }  
-                                         },  
-                                         {  
-                                             text:'取消',  
-                                             width:80,  
-                                             height:30,  
-                                             handler:function(){  
-                                                 //点击取消，关闭登录窗口  
-                                                 var form = this.up('form');  
-                                                 form.close();  
-                                             }  
-                                         }  
-                                ]  
-                            }  
-                    )  
-                }  
-        )
+<meta http-equiv="Content-Type" content="textml; charset=utf-8" />
+<title></title>
+<!--ExtJs框架开始-->
+<link rel="stylesheet" type="text/css"
+	href="./Extjs4.2/resources/css/ext-all.css" />
+<script type="text/javascript" src="./Extjs4.2/ext-all.js"></script>
+<link rel="stylesheet" type="text/css" href="./checkcode.css" />
 
-    </script>
+<!--ExtJs框架结束-->
+<script type="text/javascript">
+Ext.onReady(biaodan);
+
+function biaodan() {
+    //创建表单面板  
+    var MyformPanel = Ext.create('Ext.form.Panel', {
+        frame : true,
+        title : 'FormFields Validation',
+        width : 340,
+        bodyPadding : 5,
+        url: 'save-form.php',
+        renderTo : "panel22", //渲染到页面的form中去  
+        fieldDefaults : {
+            labelAlign : 'left',
+            labelWidth : 90,
+            anchor : '100%',
+            //错误提示显示在下方，还可以配置为side、title、none  
+            msgTarget : 'under'
+        },
+        items : [ {
+            xtype : 'fieldset',
+            title : '用户信息', //外框的title  
+            collapsible : true,
+            autoHeight : true,
+            autoWidth : true,
+            defaults : {
+                width : 150,
+                allowBlank : false,
+                xtype : 'textfield'
+            },//提取共同属性  
+            items : [ {
+                xtype : 'textfield',
+                name : 'textfield1',
+                fieldLabel : '必须输入',
+                //不允许为空验证  
+                allowBlank : false
+            //1  
+            }, {
+                xtype : 'textfield',
+                name : 'textfield2',
+                fieldLabel : '最多两个字符',
+                //输入的字符长度验证（至少输入2个字符）  
+                minLength : 2
+            //2  
+            }, {
+                xtype : 'textfield',
+                name : 'textfield3',
+                fieldLabel : '最长5个字符',
+                //输入的字符长度验证（最多输入2个字符）  
+                maxLength : 5
+            //3  
+            }, 
+            //{
+           //     xtype : 'textfield',
+             //   name : 'textfield7',
+              //  fieldLabel : '正则表达式验证电话号码',
+                //通过正则表达式验证  
+              //  regex : /^\d{3}-\d{3}-\d{4}$/, //4  
+             //   regexText : 'Must be in the format xxx-xxx-xxxx'
+           // },
+            {
+                xtype : 'textfield',
+                name : 'textfield4',
+                fieldLabel : '验证用户输入的是否为email',
+                //已经定义好的验证，请通过文档查看vtype  
+                vtype : 'email' //5  
+            }]
+        } ],
+        buttons : [ {
+            text : "确定",
+            handler : function() {
+                //获取按钮的父表单  
+                var form = this.up("form").getForm();
+                //alert(form);  
+                if (form.isValid()) //判断是否通过验证  
+                {
+                    //获取页面的表单转化为dom对象后提交  
+             //      Ext.get("panel22").dom.submit();
+                    //获取页面的表单元素后提交  
+                    form.submit({
+                        success: function(form, action) {
+                           Ext.Msg.alert('Success', action.result.message);
+                        },
+                        failure: function(form, action) {
+                            Ext.Msg.alert('Failed', action.result ? action.result.message : 'No response');
+                        }
+                    });                    
+                }
+                ;
+            }
+        }, {
+            text : "取消",
+            handler : reset
+        } ],
+        buttonAlign : 'center'
+    });
+    
+    function reset() {
+        MyformPanel.form.reset();//取消  
+    };
+};
+
+
+
+</script>
 </head>
 <body>
-
+<div id="panel22"></div>
 </body>
 </html>
