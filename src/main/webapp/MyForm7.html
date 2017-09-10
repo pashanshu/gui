@@ -1,0 +1,198 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="textml; charset=utf-8" />
+<title></title>
+<!--ExtJs框架开始-->
+<link rel="stylesheet" type="text/css"
+	href="./Extjs4.2.1/resources/css/ext-all.css" />
+<script type="text/javascript" src="./Extjs4.2.1/ext-all.js"></script>
+<link rel="stylesheet" type="text/css" href="./checkcode.css" />
+
+<!--ExtJs框架结束-->
+<script type="text/javascript">
+	Ext.define('App.ShipMgr.model.ShipModel', {
+		extend : 'Ext.data.Model',
+		fields : [ {
+			name : 'grId',
+			type : 'string',
+			remark : 'grId'
+		}, {
+			name : 'grGrantoraddr',
+			type : 'string',
+			remark : 'grGrantoraddr'
+		}, {
+			name : 'grAmount',
+			type : 'int',
+			remark : 'grAmount'
+		}, {
+			name : 'grCreatetime',
+			type : 'date',
+			remark : 'grCreatetime'
+		}, {
+			name : 'grAcceptdeadline',
+			type : 'date',
+			remark : 'grAcceptdeadline'
+		}, {
+			name : 'grApplydeadline ',
+			type : 'date',
+			remark : 'grApplydeadline'
+		}, ]
+	});
+
+	Ext.onReady(gridReceive);
+
+	function gridReceive() {
+		var searchConditionObj = {}; // 查询条件
+   	/* 	var shipMgrStore = Ext.create('Ext.data.Store', {
+			model : 'App.ShipMgr.model.ShipModel',
+			pageSize : 25,
+			autoLoad : true,
+			proxy : {
+				type : 'ajax',
+				url : '/gui/rest/test/invoke2',
+				reader : {
+					type : 'json',
+					root : 'resultList',
+				},
+				writer:{
+					type:'json',
+				},
+				actionMethods : {
+					create : 'Post'
+				}
+			}
+		});    */
+		
+		
+		// 创建store
+		var shipMgrStore = Ext.create('Ext.data.Store', {
+
+			model : 'App.ShipMgr.model.ShipModel',
+			pageSize : 25,
+			autoLoad : true,
+			proxy : {
+				type : 'ajax',
+				url : '/gui/rest/test/invoke3',	
+ 				reader : {
+					type : 'json',
+					root : 'resultList',
+					totalProperty: 'rowCount',
+				},
+ 				writer:{
+					type: 'json',
+				}, 
+ 				actionMethods : {
+					create: 'POST',
+				}  
+			},
+			listeners : {
+				beforeload : function(thisStore, record, opts) {
+					// 附加检索条件
+					thisStore.proxy.extraParams = searchConditionObj;
+					
+				}
+			}
+		}); 
+
+		// 创建grid
+		var shipMgrGrid = Ext.create('Ext.grid.Panel', {
+			//renderTo : 'div2',
+			store : shipMgrStore,
+			columnLines : true,
+			rowLines : true,
+			/* 	    bbar: Ext.create('Ext.toolbar.Paging', {
+			         store: shipMgrStore,
+			         pageSize: 25,
+			         displayInfo: true,
+			         displayMsg: '当前显示第{0}行到第{1}行，一共{2}行。',
+			         emptyMsg: '没有任何记录'
+			     }), */
+			columns : [ {
+				text : 'grId',
+				dataIndex : 'grId',
+				width : 50
+			}, {
+				text : 'grGrantoraddr',
+				dataIndex : 'grGrantoraddr',
+				width : 150
+			}, {
+				text : 'grAmount',
+				dataIndex : 'grAmount',
+				width : 150
+			}, {
+				text : 'grCreatetime',
+				dataIndex : 'grCreatetime',
+				width : 150
+			}, {
+				text : 'grAcceptdeadline',
+				dataIndex : 'grAcceptdeadline',
+				width : 150
+			}, {
+				text : 'grApplydeadline',
+				dataIndex : 'grApplydeadline',
+				width : 150
+			} ]
+		});
+		
+		
+ 		// 创建工具条
+		var shipMgrToolBarPanel = Ext.create('Ext.panel.Panel', {
+			renderTo : 'div1',
+			width : '100%',
+			height : 4000,
+			bodyBorder : false,
+			border : false,
+			region : 'north',
+			items:[
+				shipMgrGrid
+			],
+			tbar : [
+					Ext.create('Ext.form.field.Text', {
+						name : 'searchTxt',
+						emptyText : '请输入UIId',
+						width : 200,
+						enableKeyEvents : true,
+						listeners : {
+							keyup : function(thisControl, e, eOpts) {
+								if (e.button == 12) { // 若敲的键为回车，就执行【查询】搜索
+									shipMgrToolBarPanel.down('[name=QueryBtn]')
+											.handler();
+								}
+							}
+						}
+					}),
+					Ext.create('Ext.Action', {
+						icon : './Extjs4.2.1/Resources/icon/find.png',
+						text : '查询',
+						name : 'QueryBtn',
+						handler : function() {
+							// 设置搜索条件
+							searchConditionObj.searchTxt = shipMgrToolBarPanel
+									.down('[name=searchTxt]').value;
+							shipMgrStore.loadPage(1);
+							//shipMgrStore.load();
+						}
+					}) ]
+		});
+
+		
+		
+
+
+		
+		
+
+
+
+		
+		
+
+	}
+</script>
+</head>
+<body>
+	<div id='div1'></div>
+	<div id='div2'></div>
+</body>
+</html>
